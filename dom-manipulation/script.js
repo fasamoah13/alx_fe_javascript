@@ -239,3 +239,72 @@ if (document.readyState === "loading") {
 } else {
   initialize();
 }
+
+
+// -----------------------------
+// Simulated server sync
+// -----------------------------
+async function fetchServerQuotes() {
+  try {
+    const response = await fetch(SERVER_URL);
+    if (!response.ok) throw new Error("Failed to fetch server data");
+    const serverData = await response.json();
+
+    // Simulate server quotes: pick only first 5 posts
+    const serverQuotes = serverData.slice(0, 5).map(post => ({
+      text: post.title,
+      category: post.body || "Server"
+    }));
+
+    // Merge with local quotes, server takes precedence
+    let updated = false;
+    serverQuotes.forEach(sq => {
+      const idx = quotes.findIndex(lq => lq.text === sq.text);
+      if (idx === -1) {
+        // New quote from server
+        quotes.push(sq);
+        updated = true;
+      } else if (quotes[idx].category !== sq.category) {
+        // Conflict: server wins
+        quotes[idx].category = sq.category;
+        updated = true;
+      }
+    });
+
+    if (updated) {
+      saveQuotesToLocalStorage();
+      populateCategories();
+      notifyUser("Quotes synced with server!");
+    }
+
+  } catch (err) {
+    console.error("Server sync failed:", err);
+  }
+}
+
+// -----------------------------
+// Notify user about sync/conflicts
+// -----------------------------
+function notifyUser(message) {
+  let notif = document.getElementById("serverNotification");
+  if (!notif) {
+    notif = document.createElement("div");
+    notif.id = "serverNotification";
+    notif.style.backgroundColor = "#fffae6";
+    notif.style.border = "1px solid #ffd700";
+    notif.style.padding = "10px";
+    notif.style.marginTop = "10px";
+    document.body.insertBefore(notif, document.body.firstChild);
+  }
+  notif.textContent = message;
+
+  // Remove notification after 5 seconds
+  setTimeout(() => {
+    notif.textContent = "";
+  }, 5000);
+}
+
+// -----------------------------
+// Start periodic sync every 30 seconds
+// -----------------------------
+setInterval(fetchServerQuotes, 30000);
