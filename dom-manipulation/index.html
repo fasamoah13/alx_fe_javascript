@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dynamic Quote Generator</title>
 </head>
 <body>
@@ -15,7 +15,7 @@
     <option value="all">All Categories</option>
   </select>
 
-  <br><br>
+  <br /><br />
 
   <!-- DISPLAY RANDOM OR FILTERED QUOTE -->
   <div id="quoteDisplay" style="margin-bottom: 20px; font-size: 18px; font-weight: bold;">
@@ -24,26 +24,23 @@
 
   <button id="newQuote">Show New Quote</button>
 
-  <hr>
+  <hr />
 
   <!-- ADD QUOTE SECTION -->
   <h2>Add Your Own Quote</h2>
-
-  <input id="newQuoteText" type="text" placeholder="Enter quote text">
-  <input id="newQuoteCategory" type="text" placeholder="Enter category">
+  <input id="newQuoteText" type="text" placeholder="Enter quote text" />
+  <input id="newQuoteCategory" type="text" placeholder="Enter category" />
   <button id="addQuoteBtn">Add Quote</button>
 
-  <hr>
+  <hr />
 
   <!-- EXPORT / IMPORT -->
   <h2>Import / Export Quotes</h2>
-
   <button id="exportBtn">Export Quotes</button>
-  <br><br>
-
-  <input type="file" id="importFile" accept="application/json">
+  <br /><br />
+  <!-- note: onchange is handled in JS by adding an event listener, but having the attribute is also fine -->
+  <input type="file" id="importFile" accept=".json,application/json" />
 
   <script src="script.js"></script>
-
 </body>
 </html>
